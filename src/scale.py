@@ -18,6 +18,7 @@ class Scale(BaseScale):
 
             self.music_helper = MusicHelper(self.intervals)
             self.generate_scale()  # here we call generate_scale during initialization
+            self.generate_modes()
         
         if isinstance(tonic, list):
             self.notes = tonic
@@ -70,3 +71,13 @@ class Scale(BaseScale):
         intervals = ['b' * -i + str(j+1) if i < 0 else '#' * i + str(j+1) if i > 0 else str(j+1) for j, i in enumerate(intervals_difference)]
 
         return intervals
+    
+    def generate_modes(self):
+        modes = []
+        for i in range(len(self.notes)):
+            mode = self.notes[i:] + self.notes[:i]
+            modes.append(mode)
+        
+        self.modes = modes
+
+        return modes
