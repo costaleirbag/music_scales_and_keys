@@ -1,5 +1,5 @@
 import numpy as np
-from music_constants import base_intervals
+from .music_constants import base_intervals
 
 
 class MusicHelper:

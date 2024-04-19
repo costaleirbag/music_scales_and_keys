@@ -1,5 +1,6 @@
 import numpy as np
-from music_constants import base_notes
+
+from .music_constants import base_notes
 
 
 class BaseScale:
@@ -20,5 +21,6 @@ class BaseScale:
                 return "b"
             else:
                 return ''
+            
     def debug_mixed_accidents(self, notes):
         return [note.replace('#b', '').replace('b#', '') for note in notes]

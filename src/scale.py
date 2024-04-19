@@ -1,8 +1,8 @@
 import numpy as np
 
-from base_scale import BaseScale
-from music_constants import catalog, base_intervals
-from music_helper import MusicHelper
+from .base_scale import BaseScale
+from .music_constants import catalog, base_intervals
+from .music_helper import MusicHelper
 
 
 class Scale(BaseScale):
