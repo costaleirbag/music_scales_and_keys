@@ -15,8 +15,6 @@ class Key:
         
         intervals = np.array(intervals) - intervals[0] + 1
 
-        #print(intervals)
-
         if intervals[1] == 4:
             chord_name += "m"
         if intervals[3] == 12:
@@ -31,14 +29,17 @@ class Key:
 
     def generate_chords(self, type='thirds'):
         chords = []
+        num_notes = 4 # Tetrads
         if type == "thirds":
             n_steps = 2
 
         n_notes = len(self.scale.notes)
 
         for root in range(n_notes):
-            intervals = [(self.scale.semitones_from_tonic[(i * n_steps + root) % n_notes] + 12 * ((i * n_steps + root) // n_notes)) for i in range(4)]
+            intervals = [(self.scale.semitones_from_tonic[(i * n_steps + root) % n_notes] + 12 * \
+                          ((i * n_steps + root) // n_notes)) for i in range(num_notes)]
             #intervals = [self.scale.semitones_from_tonic[(i * n_steps + root) % n_notes] for i in range(4)]
+            #print(intervals)
             chord = self.calculate_chord(self.scale.notes[root], intervals)
             chords.append(chord)    
         return chords

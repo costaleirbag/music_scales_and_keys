@@ -13,7 +13,7 @@ class BaseScale:
         if difference > 0:
             return '#'*abs(difference - note.count('b'))
         elif difference < 0:
-            return 'b'*abs(difference - note.count('#'))
+            return 'b'*abs(note.count('#') + difference)
         else:
             if "#" in note:
                 return "#"
