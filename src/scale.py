@@ -36,9 +36,7 @@ class Scale(BaseScale):
 
     def generate_scale(self):
         distances = self.calculate_distances()
-        print(distances)
         for i in range(len(self.notes) - 1):
-            print(self.notes[i])
             if "E" in self.notes[i] or "B" in self.notes[i]:    
                 difference = distances[i] - 1
             else:

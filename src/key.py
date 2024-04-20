@@ -38,8 +38,6 @@ class Key:
         for root in range(n_notes):
             intervals = [(self.scale.semitones_from_tonic[(i * n_steps + root) % n_notes] + 12 * \
                           ((i * n_steps + root) // n_notes)) for i in range(num_notes)]
-            #intervals = [self.scale.semitones_from_tonic[(i * n_steps + root) % n_notes] for i in range(4)]
-            #print(intervals)
             chord = self.calculate_chord(self.scale.notes[root], intervals)
             chords.append(chord)    
         return chords
