@@ -17,7 +17,7 @@ class Scale(BaseScale):
                 self.intervals = intervals
 
             self.music_helper = MusicHelper(self.intervals)
-            self.generate_scale()  # here we call generate_scale during initialization
+            self.generate_notes()  # here we call generate_notes during initialization
             self.generate_modes()
         
         if isinstance(tonic, list):
@@ -34,7 +34,7 @@ class Scale(BaseScale):
         self.distances = distances
         return self.distances
 
-    def generate_scale(self):
+    def generate_notes(self):
         distances = self.calculate_distances()
         for i in range(len(self.notes) - 1):
             if "E" in self.notes[i] or "B" in self.notes[i]:    

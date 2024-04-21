@@ -15,6 +15,9 @@ class Key:
         
         intervals = np.array(intervals) - intervals[0] + 1
 
+        if intervals[1] == 4 and intervals[2] == 7 and intervals[3] == 10:
+            chord_name += "dim"
+            return chord_name
         if intervals[1] == 4:
             chord_name += "m"
         if intervals[3] == 12:
