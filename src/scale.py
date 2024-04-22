@@ -25,6 +25,7 @@ class Scale(BaseScale):
             self.distances = self.calculate_distances_from_notes()
             self.semitones_from_tonic = np.cumsum([1] + self.distances)
             self.intervals = self.calculate_intervals_from_semitones()
+            self.generate_modes()
             
 
     def calculate_distances(self):

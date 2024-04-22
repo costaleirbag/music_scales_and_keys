@@ -12,6 +12,7 @@ scikit-learn = "*"
 seaborn = "*"
 mido = "*"
 pygame = "*"
+pydantic = "*"
 
 [dev-packages]
 ipykernel = "*"
