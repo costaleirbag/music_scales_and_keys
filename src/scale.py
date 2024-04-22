@@ -70,3 +70,6 @@ class Scale(BaseScale):
         intervals = ['b' * -i + str(j+1) if i < 0 else '#' * i + str(j+1) if i > 0 else str(j+1) for j, i in enumerate(intervals_difference)]
 
         return intervals
+    
+    def generate_modes(self):
+        pass
