@@ -10,6 +10,8 @@ pandas = "*"
 scipy = "*"
 scikit-learn = "*"
 seaborn = "*"
+mido = "*"
+pygame = "*"
 
 [dev-packages]
 ipykernel = "*"
