@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "music"
+version = "0.1.0"
+description = "Program to generate notes given intervals, intervals given notes, and chords given a scale."
+authors = ["Gabriel Costa <gabriel.alexandre98@hotmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+numpy = "*"
+matplotlib = "*"
+pandas = "*"
+scipy = "*"
+scikit-learn = "*"
+seaborn = "*"
+mido = "*"
+pygame = "*"
+pydub = "*"
+
+[tool.poetry.dev-dependencies]
+ipykernel = "*"
+
+[tool.poetry.scripts]
+music = "music.main:main"
