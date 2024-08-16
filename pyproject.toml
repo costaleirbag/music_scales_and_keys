@@ -15,9 +15,10 @@ seaborn = "*"
 mido = "*"
 pygame = "*"
 pydub = "*"
+pydantic = "^2.8.2"
 
 [tool.poetry.dev-dependencies]
 ipykernel = "*"
 
 [tool.poetry.scripts]
-music = "music.main:main"
+app = "app.main:main"

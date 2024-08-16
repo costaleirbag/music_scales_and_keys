@@ -1,6 +1,6 @@
 import numpy as np
 
-from .music_constants import base_notes
+from app.music_constants import base_notes
 
 
 class BaseScale:

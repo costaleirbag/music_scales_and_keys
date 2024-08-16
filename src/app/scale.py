@@ -1,8 +1,9 @@
 import numpy as np
-from typing import List, Union
-from .base_scale import BaseScale
-from .music_constants import catalog, base_intervals
-from .music_helper import MusicHelper
+from pydantic import BaseModel, validator
+from typing import Union, List, Optional
+from app.base_scale import BaseScale
+from app.music_constants import catalog, base_intervals
+from app.music_helper import MusicHelper
 
 class Scale(BaseScale):
     """Scale class created from the BaseScale class."""
@@ -28,6 +29,7 @@ class Scale(BaseScale):
             self.semitones_from_tonic = np.cumsum([1] + self.distances)
             self.intervals = self.calculate_intervals_from_semitones()
             self.generate_modes()
+
 
     def calculate_distances(self) -> np.ndarray:
         """

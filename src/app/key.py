@@ -1,5 +1,5 @@
 import numpy as np
-from .scale import Scale
+from app.scale import Scale
 
 class Key:
     def __init__(self, scale):

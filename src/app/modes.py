@@ -1,6 +1,6 @@
 import numpy as np
-from .scale import Scale
-from .key import Key
+from app.scale import Scale
+from app.key import Key
 
 class Modes:
     def __init__(self, scale):
