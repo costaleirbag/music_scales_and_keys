@@ -18,5 +18,10 @@ catalog = {
     "mixolydian b6": ["1", "2", "3", "4", "5", "b6", "b7"],
     "aeolian b5": ["1", "2", "b3", "4", "b5", "b6", "b7"],
     "super locrian": ["1", "b2", "b3", "b4", "b5", "b6", "b7"],
-    "harmonic minor": ["1", "2", "b3", "4", "5", "b6", "7"]
+    "harmonic minor": ["1", "2", "b3", "4", "5", "b6", "7"],
+    "phrygian dominant": ["1", "b2", "3", "4", "5", "b6", "b7"],
+    "locrian #6": ["1", "b2", "b3", "4", "b5", "6", "b7"],
+    "half-diminished": ["1", "b2", "b3", "4", "b5", "b6", "b7"],
+    "altered": ["1", "b2", "b3", "b4", "b5", "b6", "b7"],
+    "diminished": ["1", "b2", "b3", "4", "b5", "b6", "bb7"],
 }
