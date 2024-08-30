@@ -35,4 +35,23 @@ def reorder_notes(notes: List[str], tonic: str) -> List[str]:
     sorted_notes = sorted(notes, key=lambda note: reordered_scale.index(base_note(note)))
 
     return sorted_notes
+
+def calculate_distances_from_notes(notes: List[str]) -> List[int]:
+        """
+        Calculates distances from notes.
+
+        :return: Returns a list of distances.
+        """
+        distances = []
+        for i in range(len(notes) - 1):
+            root = notes[i][0]
+            accidents1 = notes[i][1:]
+            accidents2 = notes[i+1][1:]
+            distance = 1 if np.isin(root, ['E', 'B']) else 2
+            distance += (accidents2.count('#') - accidents1.count('#')) + (accidents1.count('b') - accidents2.count('b'))
+            distances.append(distance)
+        return distances
+
+def distance_from_intervals(note1, note2):
+    return min(12 - (note2 - note1), note2 - note1)
     

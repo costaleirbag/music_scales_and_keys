@@ -1,7 +1,7 @@
 import numpy as np
 from typing import Union, List, Optional
 from app.base_scale import BaseScale
-from app.music_constants import catalog, base_intervals
+from app.music_constants import catalog, base_intervals, base_notes
 from app.music_helper import MusicHelper
 from app.utils import utils
 
@@ -21,18 +21,20 @@ class Scale(BaseScale):
             self.intervals = catalog[intervals.lower()] if isinstance(intervals, str) else intervals
             self.music_helper = MusicHelper(self.intervals)
             self.generate_notes()
-            self.generate_modes()
+            
+        if isinstance(tonic, list): 
+            # When tonic is not a note but a list of notes
+            self.generate_intervals(tonic)
         
-
-        if isinstance(tonic, list):
-            self.notes = tonic
-            self.distances = self.calculate_distances_from_notes()
-            self.semitones_from_tonic = np.cumsum([1] + self.distances)
-            self.intervals = self.calculate_intervals_from_semitones()
-            self.generate_modes()
-        
+        self.generate_modes()
         self.tonic = self.notes[0]
         self.name = self.generate_name()
+
+    def generate_intervals(self, tonic: List[str]) -> None:
+        self.notes = tonic
+        self.distances = self.calculate_distances_from_notes()
+        self.semitones_from_tonic = np.cumsum([1] + self.distances)
+        self.intervals = self.calculate_intervals_from_semitones()
 
     def calculate_distances(self) -> np.ndarray:
         """
@@ -90,7 +92,17 @@ class Scale(BaseScale):
                 return name
         return None
     
-    def get_scale_from_dominant_chord_notes(self, chord: List[str]) -> List[str]:
+    def get_dominant_scale(self, chord_name: 'str') -> BaseScale:
+        """
+        Gets the dominant scale from a chord name.
+
+        :param chord_name: The chord name.
+        :return: Returns the dominant scale.
+        """
+        chord = generate_chord_notes_from_chord_name(chord_name)
+        return self.get_scale_from_dominant_chord_notes(chord)
+        
+    def get_scale_from_dominant_chord_notes(self, chord: List[str]) -> BaseScale:
         """
         Gets the scale from the dominant chord notes.
 
@@ -138,3 +150,31 @@ class Scale(BaseScale):
             modes.append(mode)
         self.modes = modes
         return modes
+    
+    def reorder(self, new_root: str) -> BaseScale:
+        """
+        Reorders the scale.
+
+        :param new_root: The new root of the scale.
+        :return: Returns a new instance of Scale.
+        """
+        new_notes = utils.reorder_notes(self.notes, new_root)
+        return Scale(new_notes)
+    
+
+    def __str__(self) -> str:
+        return f'{self.name} scale: {self.notes}'
+    
+
+def generate_scale_from_chord_name(chord_name: str) -> List['str']:
+    """Using the scale class to generate a scale from a chord name.
+    The chord name is supposed to be just the root note of the chord."""
+    chord_root = chord_name[0]
+    tmp_scale = Scale(utils.reorder_notes(base_notes, chord_root))
+    chord_intervals = tmp_scale.intervals
+    chord_intervals[2], chord_intervals[4], chord_intervals[6] = '3', '5', 'b7'
+    tmp_scale = Scale(chord_name, chord_intervals)
+    return tmp_scale
+
+def generate_chord_notes_from_chord_name(chord_name: str) -> List[str]:
+    return [generate_scale_from_chord_name(chord_name).notes[i] for i in [0, 2, 4, 6]]

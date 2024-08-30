@@ -10,7 +10,7 @@ class Key:
     def distance_from_intervals(note1, note2):
         return min(12 - (note2 - note1), note2 - note1)
 
-    def calculate_chord(self, root, intervals):
+    def chord_name_from_intervals(self, root, intervals):
         chord_name = root
         
         intervals = np.array(intervals) - intervals[0] + 1
@@ -41,6 +41,6 @@ class Key:
         for root in range(n_notes):
             intervals = [(self.scale.semitones_from_tonic[(i * n_steps + root) % n_notes] + 12 * \
                           ((i * n_steps + root) // n_notes)) for i in range(num_notes)]
-            chord = self.calculate_chord(self.scale.notes[root], intervals)
+            chord = self.chord_name_from_intervals(self.scale.notes[root], intervals)
             chords.append(chord)    
         return chords
