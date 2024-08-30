@@ -4,6 +4,7 @@ from app.base_scale import BaseScale
 from app.music_constants import catalog, base_intervals, base_notes
 from app.music_helper import MusicHelper
 from app.utils import utils
+import re
 
 class Scale(BaseScale):
     """Scale class created from the BaseScale class."""
@@ -58,9 +59,9 @@ class Scale(BaseScale):
                 difference = distances[i] - 1
             else:
                 difference = distances[i] - 2
-            self.notes[i+1] += self.calculate_accidents_from_difference(self.notes[i], difference)
-        self.notes = [note + self.accident for note in self.notes]
-        self.notes = self.debug_mixed_accidents(self.notes)
+            self.notes[i+1] += self.calculate_accidentals_from_difference(self.notes[i], difference)
+        self.notes = [note + self.accidental for note in self.notes]
+        self.notes = self.debug_mixed_accidentals(self.notes)
 
     def calculate_distances_from_notes(self) -> List[int]:
         """
@@ -71,10 +72,10 @@ class Scale(BaseScale):
         distances = []
         for i in range(len(self.notes) - 1):
             root = self.notes[i][0]
-            accidents1 = self.notes[i][1:]
-            accidents2 = self.notes[i+1][1:]
+            accidentals1 = self.notes[i][1:]
+            accidentals2 = self.notes[i+1][1:]
             distance = 1 if np.isin(root, ['E', 'B']) else 2
-            distance += (accidents2.count('#') - accidents1.count('#')) + (accidents1.count('b') - accidents2.count('b'))
+            distance += (accidentals2.count('#') - accidentals1.count('#')) + (accidentals1.count('b') - accidentals2.count('b'))
             distances.append(distance)
         return distances
     
@@ -170,11 +171,69 @@ def generate_scale_from_chord_name(chord_name: str) -> List['str']:
     """Using the scale class to generate a scale from a chord name.
     The chord name is supposed to be just the root note of the chord."""
     chord_root = chord_name[0]
+    chord_accidental = get_accidental(chord_name)
+    chord_extensions = find_extensions_from_chord_name(chord_name)
+
     tmp_scale = Scale(utils.reorder_notes(base_notes, chord_root))
+    
     chord_intervals = tmp_scale.intervals
+    
     chord_intervals[2], chord_intervals[4], chord_intervals[6] = '3', '5', 'b7'
-    tmp_scale = Scale(chord_name, chord_intervals)
+
+    for extension in chord_extensions:
+        extension_root, extension_accidental = get_root_and_accidental_from_extension(extension)
+        chord_intervals[int(extension_root)-1] = extension_accidental + extension_root
+
+    if chord_accidental:
+        chord_root += chord_accidental
+
+    tmp_scale = Scale(chord_root, chord_intervals)
+
     return tmp_scale
 
 def generate_chord_notes_from_chord_name(chord_name: str) -> List[str]:
     return [generate_scale_from_chord_name(chord_name).notes[i] for i in [0, 2, 4, 6]]
+
+def find_extensions_from_chord_name(chord_name: str) -> List[str]:
+    """Finds the extensions from a chord name.
+    Example: E7(b9, #11) -> ['b9', '#11']"""
+    # Find the extensions in the chord name
+    extensions = re.findall(r'\((.*?)\)', chord_name)
+    if extensions:
+        extensions = extensions[0].split(', ')
+    extensions = translate_extensions_to_intervals(extensions)
+    return extensions
+
+def get_root_and_accidental_from_extension(extension: str) -> str:
+    """Gets the root and the accidental from an extension.
+    Example: 'b9' -> ('9', 'b')"""
+    if len(extension) > 1:
+        extension_root = extension[1:]
+        extension_accidental = extension[0]
+    else:
+        extension_root = extension
+        extension_accidental = ''
+    return extension_root, extension_accidental
+        
+
+def translate_extensions_to_intervals(extensions: List[str]) -> List[str]:
+    new_extensions = []
+    for extension in extensions:
+        extension_root, extension_accidental = get_root_and_accidental_from_extension(extension)
+        extension_root = str(int(extension_root)%7)
+        extension = extension_accidental + extension_root
+        new_extensions.append(extension)
+    return new_extensions
+
+def get_accidental(chord):
+    # Regular expression to find an accidental before a letter followed by a digit
+    match = re.match(r'^[A-G](#|b)', chord)
+    return match.group(1) if match else None
+
+
+if __name__ == "__main__":
+    print("This is a test")
+    chord_name = "G7(b9, #11)"
+    print(f"{chord_name}")
+    print(Scale("C", "major").get_dominant_scale(chord_name))
+    
