@@ -167,7 +167,7 @@ class Scale(BaseScale):
         return f'{self.name} scale: {self.notes}'
     
 
-def generate_scale_from_chord_name(chord_name: str) -> List['str']:
+def generate_scale_from_dominant_chord_name(chord_name: str) -> List['str']:
     """Using the scale class to generate a scale from a chord name.
     The chord name is supposed to be just the root note of the chord."""
     chord_root = chord_name[0]
@@ -192,7 +192,7 @@ def generate_scale_from_chord_name(chord_name: str) -> List['str']:
     return tmp_scale
 
 def generate_chord_notes_from_chord_name(chord_name: str) -> List[str]:
-    return [generate_scale_from_chord_name(chord_name).notes[i] for i in [0, 2, 4, 6]]
+    return [generate_scale_from_dominant_chord_name(chord_name).notes[i] for i in [0, 2, 4, 6]]
 
 def find_extensions_from_chord_name(chord_name: str) -> List[str]:
     """Finds the extensions from a chord name.
