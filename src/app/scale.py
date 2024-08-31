@@ -100,7 +100,8 @@ class Scale(BaseScale):
         :param chord_name: The chord name.
         :return: Returns the dominant scale.
         """
-        chord = generate_chord_notes_from_chord_name(chord_name)
+        #chord = generate_chord_notes_from_chord_name(chord_name)
+        chord = generate_dominant_chord_notes_from_chord_name(chord_name)
         return self.get_scale_from_dominant_chord_notes(chord)
         
     def get_scale_from_dominant_chord_notes(self, chord: List[str]) -> BaseScale:
@@ -180,6 +181,7 @@ def generate_scale_from_dominant_chord_name(chord_name: str) -> List['str']:
     
     chord_intervals[2], chord_intervals[4], chord_intervals[6] = '3', '5', 'b7'
 
+    
     for extension in chord_extensions:
         extension_root, extension_accidental = get_root_and_accidental_from_extension(extension)
         chord_intervals[int(extension_root)-1] = extension_accidental + extension_root
@@ -187,9 +189,39 @@ def generate_scale_from_dominant_chord_name(chord_name: str) -> List['str']:
     if chord_accidental:
         chord_root += chord_accidental
 
+
     tmp_scale = Scale(chord_root, chord_intervals)
 
     return tmp_scale
+
+def generate_dominant_chord_notes_from_chord_name(chord_name: str) -> List['str']:
+    """Using the scale class to generate a scale from a chord name.
+    The chord name is supposed to be just the root note of the chord."""
+    chord_root = chord_name[0]
+    chord_accidental = get_accidental(chord_name)
+    chord_extensions = find_extensions_from_chord_name(chord_name)
+
+    tmp_scale = Scale(utils.reorder_notes(base_notes, chord_root))
+    
+    chord_intervals = tmp_scale.intervals
+    
+    chord_intervals[2], chord_intervals[4], chord_intervals[6] = '3', '5', 'b7'
+
+    chord_extension_notes_indexes = []
+
+    for extension in chord_extensions:
+        extension_root, extension_accidental = get_root_and_accidental_from_extension(extension)
+        chord_intervals[int(extension_root)-1] = extension_accidental + extension_root
+        chord_extension_notes_indexes.append(int(extension_root)-1)
+
+    if chord_accidental:
+        chord_root += chord_accidental
+
+    tmp_scale = Scale(chord_root, chord_intervals)
+
+    chord_notes = [tmp_scale.notes[i] for i in sorted([0, 2, 4, 6] + chord_extension_notes_indexes)]
+
+    return chord_notes
 
 def generate_chord_notes_from_chord_name(chord_name: str) -> List[str]:
     return [generate_scale_from_dominant_chord_name(chord_name).notes[i] for i in [0, 2, 4, 6]]
@@ -236,4 +268,4 @@ if __name__ == "__main__":
     chord_name = "G7(b9, #11)"
     print(f"{chord_name}")
     print(Scale("C", "major").get_dominant_scale(chord_name))
-    
+
