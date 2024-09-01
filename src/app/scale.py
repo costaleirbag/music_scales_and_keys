@@ -264,8 +264,10 @@ def get_accidental(chord):
 
 
 if __name__ == "__main__":
-    print("This is a test")
-    chord_name = "G7(b9, #11)"
+    chord_name = "G7(9, #11)"
     print(f"{chord_name}")
-    print(Scale("C", "major").get_dominant_scale(chord_name))
+    dominant_scale = Scale("C", "major").get_dominant_scale(chord_name)
+    print(dominant_scale.name)
+    print(dominant_scale.notes)
+    print(dominant_scale.intervals)
 
