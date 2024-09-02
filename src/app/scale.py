@@ -5,6 +5,7 @@ from app.music_constants import catalog, base_intervals, base_notes
 from app.music_helper import MusicHelper
 from app.utils import utils
 import re
+import yaml
 
 class Scale(BaseScale):
     """Scale class created from the BaseScale class."""
@@ -30,6 +31,7 @@ class Scale(BaseScale):
         self.generate_modes()
         self.tonic = self.notes[0]
         self.name = self.generate_name()
+        self.chords = self.generate_chords()
 
     def generate_intervals(self, tonic: List[str]) -> None:
         self.notes = tonic
@@ -163,9 +165,47 @@ class Scale(BaseScale):
         new_notes = utils.reorder_notes(self.notes, new_root)
         return Scale(new_notes)
     
+    def chord_name_from_intervals(self, root, intervals):
+        chord_name = root
+        
+        intervals = np.array(intervals) - intervals[0] + 1
+
+        if intervals[1] == 4 and intervals[2] == 7 and intervals[3] == 10:
+            chord_name += "dim"
+            return chord_name
+        if intervals[1] == 4:
+            chord_name += "m"
+        if intervals[3] == 12:
+            chord_name += "7M"
+        elif intervals[3] == 11:
+            chord_name += "7"
+        if intervals[2] == 7:
+            chord_name += "(b5)"
+        if intervals[2] == 9:
+            chord_name += "(#5)"
+        return chord_name
+
+    def generate_chords(self, type='thirds'):
+        chords = []
+        num_notes = 4 # Tetrads
+        if type == "thirds":
+            n_steps = 2
+
+        n_notes = len(self.notes)
+
+        for root in range(n_notes):
+            intervals = [(self.semitones_from_tonic[(i * n_steps + root) % n_notes] + 12 * \
+                          ((i * n_steps + root) // n_notes)) for i in range(num_notes)]
+            chord = self.chord_name_from_intervals(self.notes[root], intervals)
+            chords.append(chord)    
+        return chords
+    
 
     def __str__(self) -> str:
         return f'{self.name} scale: {self.notes}'
+    
+    def __repr__(self):
+        return f'Scale object: {self.name}'
     
 
 def generate_scale_from_dominant_chord_name(chord_name: str) -> List['str']:
